@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dev/style/style.dart' as theme;
 
 void main() {
-  runApp(MaterialApp(home: MyApp(), theme: ThemeData()));
+  runApp(MaterialApp(home: MyApp(), theme: theme.theme));
 }
 
 class MyApp extends StatefulWidget {
@@ -23,7 +24,19 @@ class _MyAppState extends State<MyApp> {
           IconButton(onPressed: () {}, icon: Icon(Icons.add_box_outlined)),
         ],
       ),
-      body: Text('data'),
+      body: TextButton(onPressed: () {}, child: Text('data')),
+      bottomNavigationBar: Theme(
+        data: theme.bottomBarTheme,
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ''),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_outlined),
+              label: '',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
