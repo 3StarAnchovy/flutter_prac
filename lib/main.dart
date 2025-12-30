@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dev/models/provider/Provider.dart';
 import 'package:flutter_dev/pages/HomeWidget.dart';
 import 'package:flutter_dev/pages/Upload.dart';
 import 'package:flutter_dev/style/style.dart' as theme;
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 // TODO(human): Post 모델 import 추가
 import 'package:flutter_dev/models/dto/post.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyApp(), theme: theme.theme));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Store1()),
+        ChangeNotifierProvider(create: (context) => Store2()),
+      ],
+
+      child: MaterialApp(home: MyApp(), theme: theme.theme),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -39,6 +49,12 @@ class _MyAppState extends State<MyApp> {
   List<Post> posts = [];
 
   var userImage;
+
+  void saveData() async {
+    var storage = await SharedPreferences.getInstance();
+    storage.setString('name', 'john');
+    print(storage.get('name'));
+  }
 
   /*
   새 게시물 갱신
@@ -87,6 +103,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getData(initUrl);
+    saveData();
   }
 
   @override

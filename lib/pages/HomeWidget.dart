@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dev/models/dto/post.dart';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+
+import 'package:flutter_dev/pages/UserProfile.dart';
 
 class HomeWidget extends StatefulWidget {
   HomeWidget({super.key, required this.posts, required this.addData});
@@ -51,7 +54,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                     : Image.file(File(p[i].image)),
               ),
               Row(children: [Text('좋아요'), Text(p[i].likes.toString())]),
-              Row(children: [Text('글쓴이'), Text(p[i].user.toString())]),
+              GestureDetector(
+                child: Row(children: [Text('글쓴이'), Text(p[i].user.toString())]),
+                onTap: () => {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (c) => Userprofile()),
+                  ),
+                },
+              ),
               Row(children: [Text('글내용'), Text(p[i].content.toString())]),
             ],
           );
