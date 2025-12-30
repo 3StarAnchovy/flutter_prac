@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dev/models/dto/post.dart';
+import 'dart:io';
 
 class HomeWidget extends StatefulWidget {
   HomeWidget({super.key, required this.posts, required this.addData});
@@ -41,9 +42,14 @@ class _HomeWidgetState extends State<HomeWidget> {
         scrollDirection: Axis.vertical,
         itemCount: p.length,
         itemBuilder: (context, i) {
+          print(p[i].image);
           return Column(
             children: [
-              Container(child: Image.network(p[i].image)),
+              Container(
+                child: p[i].image.contains("http")
+                    ? Image.network(p[i].image)
+                    : Image.file(File(p[i].image)),
+              ),
               Row(children: [Text('좋아요'), Text(p[i].likes.toString())]),
               Row(children: [Text('글쓴이'), Text(p[i].user.toString())]),
               Row(children: [Text('글내용'), Text(p[i].content.toString())]),

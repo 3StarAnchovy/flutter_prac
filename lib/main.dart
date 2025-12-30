@@ -40,6 +40,9 @@ class _MyAppState extends State<MyApp> {
 
   var userImage;
 
+  /*
+  새 게시물 갱신
+  */
   void addData(String url) async {
     var res = await http.get(Uri.parse(url));
     Map<String, dynamic> temp = jsonDecode(res.body);
@@ -49,6 +52,16 @@ class _MyAppState extends State<MyApp> {
     print(temp);
   }
 
+  void insertPost(Post post) {
+    setState(() {
+      posts.add(post);
+      posts.sort((a, b) => b.id.compareTo(a.id));
+    });
+  }
+
+  /*
+게시물 조회
+*/
   void getData(String url) async {
     /*
     * API 호출부
@@ -92,13 +105,16 @@ class _MyAppState extends State<MyApp> {
 
               if (image != null) {
                 setState(() {
-                  userImage = File(image.path);
+                  userImage = image.path;
                 });
               }
 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (c) => Upload(image: image)),
+                MaterialPageRoute(
+                  builder: (c) =>
+                      Upload(image: userImage, insertPost: insertPost),
+                ),
               );
             },
             icon: Icon(Icons.add_box_outlined),
