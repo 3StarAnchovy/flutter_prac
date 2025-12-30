@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // TODO(human): Post 모델 import 추가
-import 'package:flutter_dev/models/post.dart';
+import 'package:flutter_dev/models/dto/post.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp(), theme: theme.theme));
@@ -30,26 +30,35 @@ class _MyAppState extends State<MyApp> {
   0은 홈, 1은 쇼핑
   */
   int tabState = 0;
+  String initUrl = 'https://codingapple1.github.io/app/data.json';
 
   List<Post> posts = [];
 
-  getData() async {
+  void addData(String url) async {
+    var res = await http.get(Uri.parse(url));
+    Map<String, dynamic> temp = jsonDecode(res.body);
+    setState(() {
+      posts.add(Post.fromJson(temp));
+    });
+    print(temp);
+  }
+
+  void getData(String url) async {
     /*
     * API 호출부
     */
-    var res = await http.get(
-      Uri.parse('https://codingapple1.github.io/app/data.json'),
-    );
+    print(url);
+    var res = await http.get(Uri.parse(url));
+    print(res.body);
 
     // 1. jsonDecode(result.body)를 List<dynamic>으로 받기
     // 2. map()과 Post.fromJson()을 사용해서 List<Post>로 변환
-    //// 3. setState(() { posts = 변환된리스트; })
+    // 3. setState(() { posts = 변환된리스트; })
     List<dynamic> temp = jsonDecode(res.body);
+
     setState(() {
       posts = temp.map((e) => Post.fromJson(e)).toList();
     });
-    print('여기에용');
-    print(posts[0].content);
   }
 
   /*
@@ -58,8 +67,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-    getData();
+    getData(initUrl);
   }
 
   @override
@@ -73,7 +81,10 @@ class _MyAppState extends State<MyApp> {
           IconButton(onPressed: () {}, icon: Icon(Icons.add_box_outlined)),
         ],
       ),
-      body: [HomeWidget(posts: posts), Text('샵페이지')][tabState],
+      body: [
+        HomeWidget(posts: posts, addData: addData),
+        Text('샵페이지'),
+      ][tabState],
       bottomNavigationBar: Theme(
         data: theme.bottomBarTheme,
         child: BottomNavigationBar(

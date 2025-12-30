@@ -1,20 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dev/models/post.dart';
+import 'package:flutter_dev/models/dto/post.dart';
 
 class HomeWidget extends StatefulWidget {
-  const HomeWidget({super.key, required this.posts});
+  HomeWidget({super.key, required this.posts, required this.addData});
   final List<Post> posts;
+  final Function addData;
 
   @override
   State<HomeWidget> createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  //스크롤 컨트럴러
+  var scroll = ScrollController();
+
+  //두번쨰 요청
+  String scdUrl = 'https://codingapple1.github.io/app/more1.json';
+
+  @override
+  void initState() {
+    super.initState();
+
+    scroll.addListener(() {
+      var userDir = scroll.position.userScrollDirection;
+      if (userDir == 'ScrollDirection.reverse') {}
+
+      if (scroll.position.pixels == scroll.position.maxScrollExtent) {
+        widget.addData(scdUrl);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var p = widget.posts;
+    if (p.isEmpty) return Text('로딩중');
     return Container(
       child: ListView.builder(
+        controller: scroll,
         scrollDirection: Axis.vertical,
         itemCount: p.length,
         itemBuilder: (context, i) {
