@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dev/pages/HomeWidget.dart';
+import 'package:flutter_dev/pages/Upload.dart';
 import 'package:flutter_dev/style/style.dart' as theme;
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 // TODO(human): Post 모델 import 추가
 import 'package:flutter_dev/models/dto/post.dart';
@@ -33,6 +37,8 @@ class _MyAppState extends State<MyApp> {
   String initUrl = 'https://codingapple1.github.io/app/data.json';
 
   List<Post> posts = [];
+
+  var userImage;
 
   void addData(String url) async {
     var res = await http.get(Uri.parse(url));
@@ -78,7 +84,25 @@ class _MyAppState extends State<MyApp> {
         /* 아이폰은 가운데가 디폴트, 안드는 왼쪽임*/
         title: Text("Test"),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.add_box_outlined)),
+          IconButton(
+            onPressed: () async {
+              // image picker
+              var picker = ImagePicker();
+              var image = await picker.pickImage(source: ImageSource.gallery);
+
+              if (image != null) {
+                setState(() {
+                  userImage = File(image.path);
+                });
+              }
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (c) => Upload(image: image)),
+              );
+            },
+            icon: Icon(Icons.add_box_outlined),
+          ),
         ],
       ),
       body: [
