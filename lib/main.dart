@@ -111,6 +111,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showNotification();
+        },
+        child: Text('+'),
+      ),
       appBar: AppBar(
         centerTitle: false,
         /* 아이폰은 가운데가 디폴트, 안드는 왼쪽임*/
