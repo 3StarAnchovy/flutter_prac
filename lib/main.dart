@@ -113,7 +113,7 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showNotification();
+          showNotification2();
         },
         child: Text('+'),
       ),
