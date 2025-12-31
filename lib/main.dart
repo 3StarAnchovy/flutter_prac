@@ -3,6 +3,7 @@ import 'package:flutter_dev/models/provider/Provider.dart';
 import 'package:flutter_dev/pages/HomeWidget.dart';
 import 'package:flutter_dev/pages/Upload.dart';
 import 'package:flutter_dev/style/style.dart' as theme;
+import 'package:flutter_dev/utils/notification.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
@@ -104,6 +105,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     getData(initUrl);
     saveData();
+    initNotification();
   }
 
   @override
