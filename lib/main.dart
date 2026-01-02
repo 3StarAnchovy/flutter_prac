@@ -14,7 +14,19 @@ import 'dart:convert';
 // TODO(human): Post 모델 import 추가
 import 'package:flutter_dev/models/dto/post.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    ); // Firebase 초기화
+    print('Firebase 초기화 성공');
+  } catch (e) {
+    print('Firebase 초기화 중 오류 발생: $e');
+  }
   runApp(
     MultiProvider(
       providers: [
